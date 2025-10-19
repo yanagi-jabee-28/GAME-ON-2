@@ -1,5 +1,6 @@
 import { createSignal, Show } from 'solid-js';
 import TicTacToe from './games/TicTacToe/TicTacToe';
+import Shiritori from './games/Shiritori/Shiritori';
 import { type Game } from './types/game';
 import './App.css';
 
@@ -9,6 +10,12 @@ const games: Game[] = [
     name: 'Tic Tac Toe',
     description: 'Classic 3x3 grid game',
     component: TicTacToe,
+  },
+  {
+    id: 'shiritori',
+    name: 'しりとり',
+    description: '単語カードをドラッグしてしりとりを作ろう',
+    component: Shiritori,
   },
   // Add more games here
 ];
