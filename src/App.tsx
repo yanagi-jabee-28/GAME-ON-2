@@ -1,35 +1,52 @@
-import { createSignal } from 'solid-js'
-import solidLogo from './assets/solid.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createSignal, Show } from 'solid-js';
+import TicTacToe from './games/TicTacToe/TicTacToe';
+import { type Game } from './types/game';
+import './App.css';
+
+const games: Game[] = [
+  {
+    id: 'tictactoe',
+    name: 'Tic Tac Toe',
+    description: 'Classic 3x3 grid game',
+    component: TicTacToe,
+  },
+  // Add more games here
+];
 
 function App() {
-  const [count, setCount] = createSignal(0)
+  const [selectedGame, setSelectedGame] = createSignal<Game | null>(null);
+
+  const selectGame = (game: Game) => {
+    setSelectedGame(game);
+  };
+
+  const backToMenu = () => {
+    setSelectedGame(null);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={solidLogo} class="logo solid" alt="Solid logo" />
-        </a>
-      </div>
-      <h1>Vite + Solid</h1>
-      <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count()}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p class="read-the-docs">
-        Click on the Vite and Solid logos to learn more
-      </p>
-    </>
-  )
+    <div class="app">
+      <Show
+        when={selectedGame()}
+        fallback={
+          <div class="menu">
+            <h1>GAME ON!</h1>
+            <p>Select a game to play:</p>
+            <div class="game-list">
+              {games.map(game => (
+                <div class="game-card" onClick={() => selectGame(game)}>
+                  <h3>{game.name}</h3>
+                  <p>{game.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+      >
+        {selectedGame()!.component({ onBack: backToMenu })}
+      </Show>
+    </div>
+  );
 }
 
-export default App
+export default App;
